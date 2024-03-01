@@ -9,12 +9,11 @@ function translatePage() {
 }
 
 async function translateElement(element, targetLanguage) {
-  // Obtiene el texto del elemento
-  const text = element.innerText;
-
-  // Traduce el texto al idioma deseado usando google-translate-api
-  const translatedText = await translate(text, { to: targetLanguage });
-
-  // Asigna el texto traducido al elemento
-  element.innerText = translatedText.text;
+  try {
+    const text = element.innerText;
+    const translatedText = await translate(text, { to: targetLanguage });
+    element.innerText = translatedText.text;
+  } catch (error) {
+    console.error("Error en la traducción:", error);
+  }
 }
