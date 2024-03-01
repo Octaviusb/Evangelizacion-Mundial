@@ -112,6 +112,9 @@ main .contenido .fecha {
 	color: #B5B5B5;
 }
 
+#traducir {
+	align-items: flex-end;
+}
 .pie {
 	text-align: center;
 }
