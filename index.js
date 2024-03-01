@@ -1,3 +1,8 @@
+// Espera a que la API de Google Translate se cargue
+googleTranslateElementInit = () => {
+  new google.translate.TranslateElement({pageLanguage: 'es'}, 'google_translate_element');
+}
+
 function translatePage() {
   // Obtiene el idioma deseado (puedes personalizar esto)
   const targetLanguage = prompt("Ingresa el código de idioma destino (por ejemplo, 'es' para español):");
