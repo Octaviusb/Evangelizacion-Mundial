@@ -1,35 +1,43 @@
+// Agrega tu clave de API de Google Cloud Platform aquí
+const apiKey = 'pub_405fa917a806c4c9b337b1f81d25b096';
+
 // Espera a que la API de Google Translate se cargue
 googleTranslateElementInit = () => {
-  new google.translate.TranslateElement({pageLanguage: 'es'}, 'google_translate_element');
+  new google.translate.TranslateElement({ pageLanguage: 'es' }, 'google_translate_element');
 }
 
-function translatePage() {
-  // Obtiene el idioma deseado (puedes personalizar esto)
+async function translatePage() {
   const targetLanguage = prompt("Ingresa el código de idioma destino (por ejemplo, 'es' para español):");
 
-  // Traduce el contenido de la página
-  document.querySelectorAll('body *').forEach(element => {
-    translateElement(element, targetLanguage);
+  document.querySelectorAll('body *').forEach(async element => {
+    try {
+      const text = element.innerText;
+      const translatedText = await translateWithGoogleAPI(text, targetLanguage, apiKey);
+      element.innerText = translatedText;
+    } catch (error) {
+      console.error("Error en la traducción:", error);
+    }
   });
 }
 
-async function translateElement(element, targetLanguage) {
-<<<<<<< HEAD
-  try {
-    const text = element.innerText;
-    const translatedText = await translate(text, { to: targetLanguage });
-    element.innerText = translatedText.text;
-  } catch (error) {
-    console.error("Error en la traducción:", error);
+async function translateWithGoogleAPI(text, targetLanguage, apiKey) {
+  const apiUrl = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
+  const response = await fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      q: text,
+      target: targetLanguage,
+    }),
+  });
+
+  const data = await response.json();
+
+  if (data && data.data && data.data.translations && data.data.translations.length > 0) {
+    return data.data.translations[0].translatedText;
+  } else {
+    throw new Error('No se pudo realizar la traducción.');
   }
-=======
-  // Obtiene el texto del elemento
-  const text = element.innerText;
-
-  // Traduce el texto al idioma deseado usando google-translate-api
-  const translatedText = await translate(text, { to: targetLanguage });
-
-  // Asigna el texto traducido al elemento
-  element.innerText = translatedText.text;
->>>>>>> 67a3a659cf9cb7c7a6ea8df9c2bb43a66f752d51
 }
