@@ -1,7 +1,5 @@
 var url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyDhm4MWUafQ72DSvq2e_BbzxaGT1ENdAcM&source=auto&target=' + targetLanguage + '&q=' + encodeURI(inputText);
 
-
-// Espera a que la API de Google Translate se cargue
 googleTranslateElementInit = () => {
   new google.translate.TranslateElement({ pageLanguage: 'es' }, 'google_translate_element');
 }
