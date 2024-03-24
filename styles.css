@@ -89,28 +89,7 @@ ul li {
 /* * ============ MAIN ============ */
 /* * ============================== */
 
-main {
-    margin-left: 30px;
-	min-height: 100vh;
-}
 
-main .contenido p {
-	margin-left: 30px;
-	margin-bottom: 20px;
-	line-height: 30px;
-	color: #525151;
-}
-
-main .contenido .titulo {
-    font-family: 'Montserrat', sans-serif;
-	font-weight: normal;
-	padding-top: 40px;
-}
-
-main .contenido .fecha {
-	font-size: 14px;
-	color: #B5B5B5;
-}
 
 #traducir {
 	align-items: flex-end;
