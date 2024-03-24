@@ -1,3 +1,7 @@
+googleTranslateElementInit = () => {
+  new google.translate.TranslateElement({ pageLanguage: 'es' }, 'google_translate_element');
+}
+
 async function translatePage() {
   const selectElement = document.createElement('select');
   selectElement.innerHTML = `
@@ -106,6 +110,7 @@ async function translatePage() {
   <option value="yi">Yidis</option>
   <option value="yo">Yoruba</option>
   <option value="zu">Zulú</option>
+    <!-- Agrega más opciones de idioma según tus necesidades -->
   `;
 
   const targetLanguage = await promptWithSelect("Selecciona el idioma destino:", selectElement);
@@ -114,7 +119,7 @@ async function translatePage() {
     document.querySelectorAll('body *').forEach(async element => {
       try {
         const text = element.innerText;
-        const translatedText = await translateWithGoogleAPI(text, targetLanguage, 'TU_CLAVE_API');
+        const translatedText = await translateWithGoogleAPI(text, targetLanguage, apiKey);
         element.innerText = translatedText;
       } catch (error) {
         console.error("Error en la traducción:", error);
@@ -154,7 +159,7 @@ async function promptWithSelect(message, selectElement) {
 }
 
 async function translateWithGoogleAPI(text, targetLanguage, apiKey) {
-  const apiUrl = `https://translation.googleapis.com/language/translate/v2?key=${AIzaSyA7TZnzkop_2v2s0Lj52JW-eCuJ-c69u-k}`;
+  const apiUrl = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
   const response = await fetch(apiUrl, {
     method: 'POST',
     headers: {
