@@ -159,7 +159,7 @@ async function promptWithSelect(message, selectElement) {
 }
 
 async function translateWithGoogleAPI(text, targetLanguage, apiKey) {
-  const apiUrl = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
+  const apiUrl = `https://translation.googleapis.com/language/translate/v2?key=${AIzaSyA7TZnzkop_2v2s0Lj52JW-eCuJ-c69u-k}`;
   const response = await fetch(apiUrl, {
     method: 'POST',
     headers: {
