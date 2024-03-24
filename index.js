@@ -1,7 +1,3 @@
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({ pageLanguage: 'es' }, 'google_translate_element');
-}
-
 async function translatePage() {
   const selectElement = document.createElement('select');
   selectElement.innerHTML = `
@@ -116,15 +112,13 @@ async function translatePage() {
   const targetLanguage = await promptWithSelect("Selecciona el idioma destino:", selectElement);
 
   if (targetLanguage) {
-    document.querySelectorAll('body *').forEach(async element => {
-      try {
-        const text = element.innerText;
-        const translatedText = await translateWithGoogleAPI(text, targetLanguage, apiKey);
-        element.innerText = translatedText;
-      } catch (error) {
-        console.error("Error en la traducción:", error);
-      }
-    });
+    // Obtener el texto a traducir de los elementos del cuerpo de la página
+    const elementsToTranslate = document.querySelectorAll('body *');
+    for (const element of elementsToTranslate) {
+      const text = element.innerText;
+      const translatedText = await translateWithGoogleAPI(text, targetLanguage);
+      element.innerText = translatedText;
+    }
   } else {
     console.log("No se seleccionó ningún idioma destino.");
   }
@@ -143,11 +137,6 @@ async function promptWithSelect(message, selectElement) {
     wrapperElement.appendChild(selectElement);
     wrapperElement.appendChild(buttonElement);
 
-    const closePrompt = () => {
-      document.body.removeChild(wrapperElement);
-      reject(null);
-    };
-
     buttonElement.addEventListener('click', () => {
       const selectedValue = selectElement.value;
       document.body.removeChild(wrapperElement);
@@ -158,23 +147,13 @@ async function promptWithSelect(message, selectElement) {
   });
 }
 
-async function translateWithGoogleAPI(text, targetLanguage, apiKey) {
-  const apiUrl = `https://translation.googleapis.com/language/translate/v2?key=${AIzaSyA7TZnzkop_2v2s0Lj52JW-eCuJ-c69u-k}`;
-  const response = await fetch(apiUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      q: text,
-      target: targetLanguage,
-    }),
-  });
-
+async function translateWithGoogleAPI(text, targetLanguage) {
+  const apiUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=${targetLanguage}&dt=t&q=${encodeURIComponent(text)}`;
+  const response = await fetch(apiUrl);
   const data = await response.json();
 
-  if (data && data.data && data.data.translations && data.data.translations.length > 0) {
-    return data.data.translations[0].translatedText;
+  if (data && data[0] && data[0][0]) {
+    return data[0][0];
   } else {
     throw new Error('No se pudo realizar la traducción.');
   }
