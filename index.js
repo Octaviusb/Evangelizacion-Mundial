@@ -112,13 +112,13 @@ async function translatePage() {
   const targetLanguage = await promptWithSelect("Selecciona el idioma destino:", selectElement);
 
   if (targetLanguage) {
-    // Obtener el texto a traducir de los elementos del cuerpo de la página
-    const elementsToTranslate = document.querySelectorAll('body *');
-    for (const element of elementsToTranslate) {
-      const text = element.innerText;
-      const translatedText = await translateWithGoogleAPI(text, targetLanguage);
-      element.innerText = translatedText;
-    }
+    const googleTranslateElementInit = () => {
+      new google.translate.TranslateElement({ pageLanguage: 'es', includedLanguages: targetLanguage, layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
+    };
+
+    const script = document.createElement('script');
+    script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    document.head.appendChild(script);
   } else {
     console.log("No se seleccionó ningún idioma destino.");
   }
@@ -145,16 +145,4 @@ async function promptWithSelect(message, selectElement) {
 
     document.body.appendChild(wrapperElement);
   });
-}
-
-async function translateWithGoogleAPI(text, targetLanguage) {
-  const apiUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=${targetLanguage}&dt=t&q=${encodeURIComponent(text)}`;
-  const response = await fetch(apiUrl);
-  const data = await response.json();
-
-  if (data && data[0] && data[0][0]) {
-    return data[0][0];
-  } else {
-    throw new Error('No se pudo realizar la traducción.');
-  }
 }
